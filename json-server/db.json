@@ -1,0 +1,88 @@
+{
+  "openspaces": [
+    {
+      "id": 0,
+      "name": "Burgess Park",
+      "xcoord": 51.4834963,
+      "ycoord": -0.0837171,
+      "description": "A lake, sports facilities, gardens and a cafe, all set in spacious parklands created in the 1940s.",
+      "comments": [
+        {
+          "rating": 2,
+          "comment": "Terrible park.",
+          "author": "John Smith",
+          "date": "2012-10-16T17:57:28.556094Z"
+        },
+        {
+          "rating": 4,
+          "comment": "Amazing!",
+          "author": "Anna Patrick",
+          "date": "2014-09-05T17:57:28.556094Z"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "name": "Camberwell Green",
+      "xcoord": 51.4748631,
+      "ycoord": -0.094841,
+      "description": "Camberwell Green is a small area of common land in Camberwell, South London. It lies at the junction of Camberwell Road and Camberwell New Road/Camberwell Church Street.",
+      "comments": [
+        {
+          "rating": 2,
+          "comment": "Terrible park.",
+          "author": "John Smith",
+          "date": "2012-10-16T17:57:28.556094Z"
+        },
+        {
+          "rating": 4,
+          "comment": "Amazing!",
+          "author": "Anna Patrick",
+          "date": "2014-09-05T17:57:28.556094Z"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Regent's Park",
+      "xcoord": 51.5312738,
+      "ycoord": -0.1591581,
+      "description": "Regent's Park is one of the Royal Parks of London. It lies within north-west London, partly in the City of Westminster and partly in the London Borough of Camden.",
+      "comments": [
+        {
+          "rating": 2,
+          "comment": "Terrible park.",
+          "author": "John Smith",
+          "date": "2012-10-16T17:57:28.556094Z"
+        },
+        {
+          "rating": 4,
+          "comment": "Amazing!",
+          "author": "Anna Patrick",
+          "date": "2014-09-05T17:57:28.556094Z"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "St Jame's Park",
+      "xcoord": 51.502463,
+      "ycoord": -0.1369996,
+      "description": "Green space with a lake with daily pelican feeding, a grass-roofed cafe and ceremonial displays.",
+      "comments": [
+        {
+          "rating": 2,
+          "comment": "Terrible park.",
+          "author": "John Smith",
+          "date": "2012-10-16T17:57:28.556094Z"
+        },
+        {
+          "rating": 4,
+          "comment": "Amazing!",
+          "author": "Anna Patrick",
+          "date": "2014-09-05T17:57:28.556094Z"
+        }
+      ]
+    }
+  ]
+}
