@@ -1,5 +1,12 @@
 <ion-view view-title="LeafWalk">
   <ion-content>
-    <h1>LeafWalk</h1>
+    <div class="card">
+        <div class="item item-divider">Open Spaces</div>
+        <div class="item item-thumbnail-left item-text-wrap">
+          <img ng-src="{{baseURL+openspace.image}}" alt="Open Space">
+          <h2>{{openspace.name}}</h2>
+          <p>{{openspace.description}}</p>
+        </div>
+    </div>
   </ion-content>
 </ion-view>

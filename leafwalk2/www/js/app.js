@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('leafwalk', ['ionic', 'leafwalk.controllers'])
+angular.module('leafWalk', ['ionic', 'leafWalk.controllers','leafWalk.services'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -29,14 +29,17 @@ angular.module('leafwalk', ['ionic', 'leafwalk.controllers'])
     url: '/app',
     abstract: true,
     templateUrl: 'templates/sidebar.html',
-    controller: 'AppCtrl'
+    controller: 'OpenSpacesController'
+    //controller: 'AppCtrl'
   })
 
   .state('app.home', {
     url: '/home',
     views: {
       'mainContent': {
-        templateUrl: 'templates/home.html'
+        templateUrl: 'templates/home.html',
+        controller: 'OpenSpacesController'
+        //controller: 'IndexController'
       }
     }
   })
@@ -69,15 +72,15 @@ angular.module('leafwalk', ['ionic', 'leafwalk.controllers'])
       }
     })
 
-  .state('app.dishdetails', {
+  /*.state('app.openspacedetail', {
     url: '/openspaces/:id',
     views: {
       'mainContent': {
-        templateUrl: 'templates/dishdetail.html',
+        templateUrl: 'templates/openspacedetail.html',
         controller: ''
       }
     }
-  });
+  })*/;
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/home');
