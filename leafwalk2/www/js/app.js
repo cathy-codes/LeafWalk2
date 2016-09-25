@@ -47,7 +47,8 @@ angular.module('leafWalk', ['ionic', 'leafWalk.controllers','leafWalk.services']
       url: '/about',
       views: {
         'mainContent': {
-          templateUrl: 'templates/about.html'
+          templateUrl: 'templates/about.html',
+          //controller: 'OpenSpacesController'
         }
       }
     })

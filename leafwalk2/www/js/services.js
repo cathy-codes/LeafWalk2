@@ -17,4 +17,10 @@ angular.module('leafWalk.services', ['ngResource'])
                 $scope.message = "Error: "+response.status + " " + response.statusText;
               });*/
         }])
+        /*.factory('corporateFactory', ['$resource', 'baseURL', function($resource,baseURL) {
+            return $resource(baseURL+"leadership/:id");
+        }])
+        .factory('feedbackFactory', ['$resource', 'baseURL', function($resource,baseURL) {
+            return $resource(baseURL+"feedback/:id");
+        }])*/
 ;
