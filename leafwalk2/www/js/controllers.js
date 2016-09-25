@@ -49,4 +49,23 @@ angular.module('leafWalk.controllers', [])
     );
 
 
-}]);
+}])
+.controller('DishCommentController', ['$scope', 'openSpacesFactory', function($scope,openSpacesFactory) {
+
+    $scope.mycomment = {rating:5, comment:"", author:"", date:""};
+
+    $scope.submitComment = function () {
+
+        $scope.mycomment.date = new Date().toISOString();
+        console.log($scope.mycomment);
+
+        $scope.dish.comments.push($scope.mycomment);
+        openSpacesFactory.getDishes().update({id:$scope.openspace.id},$scope.openspace);
+
+        $scope.commentForm.$setPristine();
+
+        $scope.mycomment = {rating:5, comment:"", author:"", date:""};
+    }
+}])
+
+;
