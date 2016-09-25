@@ -35,6 +35,19 @@ angular.module('leafWalk.services', ['ngResource'])
               favourites.push({id: index});
           };
 
+          favFac.deleteFromFavourites = function (index) {
+              for (var i = 0; i < favourites.length; i++) {
+                  if (favourites[i].id == index) {
+                      favourites.splice(i, 1);
+                  }
+              }
+          }
+
+          favFac.getFavourites = function () {
+              return favourites;
+              //console.log(favourites[0]);
+          };
+
           return favFac;
         }])
 ;

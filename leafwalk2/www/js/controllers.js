@@ -86,9 +86,9 @@ angular.module('leafWalk.controllers', [])
     });
 
     $scope.addFavorite = function (index) {
-        console.log("index is " + index);
-        favouriteFactory.addToFavourites(index);
-        $ionicListDelegate.closeOptionButtons();
+      console.log("index is " + index);
+      favouriteFactory.addToFavourites(index);
+      $ionicListDelegate.closeOptionButtons();
     }
 }])
 
@@ -150,7 +150,44 @@ angular.module('leafWalk.controllers', [])
     $scope.baseURL = baseURL;
     $scope.leaders = corporateFactory.query();
 
-}]);
+}])
+.controller('FavouritesController', ['$scope', 'openSpacesFactory', 'favouriteFactory', 'baseURL', '$ionicListDelegate', function ($scope, openSpacesFactory, favouriteFactory, baseURL, $ionicListDelegate) {
 
+    $scope.baseURL = baseURL;
+    $scope.shouldShowDelete = false;
+
+    $scope.favourites = favouriteFactory.getFavourites();
+
+    $scope.openspaces = openSpacesFactory.getOpenSpaces().query(
+      function (response) {
+          $scope.openspaces = response;
+      },
+      function (response) {
+          $scope.message = "Error: " + response.status + " " + response.statusText;
+      });
+      console.log($scope.openspaces, $scope.favourites);
+
+      $scope.toggleDelete = function () {
+          $scope.shouldShowDelete = !$scope.shouldShowDelete;
+          console.log($scope.shouldShowDelete);
+      }
+
+      $scope.deleteFavourite = function (index) {
+          favouriteFactory.deleteFromFavourites(index);
+          $scope.shouldShowDelete = false;
+      }}
+  ])
+  .filter('favouriteFilter', function () {
+      return function (openspaces, favourites) {
+        var out = [];
+        for (var i = 0; i < favourites.length; i++) {
+            for (var j = 0; j < openspaces.length; j++) {
+                if (openspaces[j].id === favourites[i].id)
+                    out.push(openspaces[j]);
+            }
+        }
+        return out;
+
+    }});
 
 ;

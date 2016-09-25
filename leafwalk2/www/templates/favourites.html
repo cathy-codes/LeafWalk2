@@ -1,0 +1,18 @@
+<ion-view view-title="My Favourites">
+    <ion-nav-buttons side="secondary">
+      <div class="buttons">
+        <button class="button button-icon icon ion-ios-minus-outline"
+          ng-click="toggleDelete()"></button>
+      </div>
+    </ion-nav-buttons>
+  <ion-content>
+    <ion-list show-delete="shouldShowDelete">
+      <ion-item ng-repeat="openspace in openspaces | favouriteFilter:favourites" href="#/app/openspaces/{{openspace.id}}" class="item-thumbnail-left" on-swipe-left="deleteFavourite(openspace.id)">
+        <img ng-src="{{baseURL+openspace.image}}">
+        <h2>{{openspace.name}}</h2>
+        <p>{{openspace.description}}</p>
+        <ion-delete-button class="ion-minus-circled" ng-click="deleteFavourite(openspace.id)"></ion-delete-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+ </ion-view>

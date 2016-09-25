@@ -90,6 +90,15 @@ angular.module('leafWalk', ['ionic', 'leafWalk.controllers','leafWalk.services']
         controller: 'OpenSpaceDetailController'
       }
     }
+  })
+  .state('app.favourites', {
+    url: '/favourites',
+    views: {
+      'mainContent': {
+        templateUrl: 'templates/favourites.html',
+          controller:'FavouritesController'
+      }
+    }
   });
 
   // if none of the above states are matched, use this as the fallback
