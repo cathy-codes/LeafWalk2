@@ -29,8 +29,8 @@ angular.module('leafWalk', ['ionic', 'leafWalk.controllers','leafWalk.services']
     url: '/app',
     abstract: true,
     templateUrl: 'templates/sidebar.html',
-    controller: 'OpenSpacesController'
-    //controller: 'AppCtrl'
+    //controller: 'OpenSpacesController'
+    controller: 'AppCtrl'
   })
 
   .state('app.home', {
@@ -53,11 +53,21 @@ angular.module('leafWalk', ['ionic', 'leafWalk.controllers','leafWalk.services']
       }
     })
 
-   .state('app.contact', {
-      url: '/contact',
+   .state('app.contactus', {
+      url: '/contactus',
       views: {
         'mainContent': {
-          templateUrl: 'templates/contact.html'
+          templateUrl: 'templates/contactus.html'
+          //controller: 'AppCtrl'
+        }
+      }
+    })
+
+   .state('app.location', {
+      url: '/location',
+      views: {
+        'mainContent': {
+          templateUrl: 'templates/location.html'
         }
       }
     })

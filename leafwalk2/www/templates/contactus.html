@@ -1,0 +1,25 @@
+<ion-modal-view>
+  <ion-header-bar>
+    <h1 class="title">Contact Us</h1>
+    <div class="buttons">
+      <!--<button class="button button-clear" ng-click="closeContact()">Close</button>-->
+      <button class="button button-balanced" ng-click="closeContact()">Close</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <form id="contactForm" name="contactForm" ng-submit="doContact()">
+      <div class="list">
+        <label class="item item-input">
+          <span class="input-label">Name</span>
+          <input type="text" ng-model="comment.author">
+        </label>
+        <label class="item item-input">
+          <textarea placeholder="Comment" ng-model="contact.comment"></textarea>
+        </label>
+        <label class="item">
+          <button class="button button-block button-balanced" type="submit">Submit</button>
+        </label>
+      </div>
+    </form>
+  </ion-content>
+</ion-modal-view>
