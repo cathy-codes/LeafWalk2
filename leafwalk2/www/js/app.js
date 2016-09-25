@@ -38,8 +38,7 @@ angular.module('leafWalk', ['ionic', 'leafWalk.controllers','leafWalk.services']
     views: {
       'mainContent': {
         templateUrl: 'templates/home.html',
-        controller: 'OpenSpacesController'
-        //controller: 'IndexController'
+        controller: 'IndexController'
       }
     }
   })
@@ -67,20 +66,20 @@ angular.module('leafWalk', ['ionic', 'leafWalk.controllers','leafWalk.services']
       views: {
         'mainContent': {
           templateUrl: 'templates/openspaces.html',
-          controller: ''
+          controller: 'OpenSpacesController'
         }
       }
     })
 
-  /*.state('app.openspacedetail', {
+  .state('app.openspacedetail', {
     url: '/openspaces/:id',
     views: {
       'mainContent': {
         templateUrl: 'templates/openspacedetail.html',
-        controller: ''
+        controller: 'OpenSpaceDetailController'
       }
     }
-  })*/;
+  });
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/app/home');

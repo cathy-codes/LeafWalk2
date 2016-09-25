@@ -1,5 +1,17 @@
-<ion-view view-title="Open Space Details">
+<!--<ion-view view-title="Open Space Details">
   <ion-content>
     <h1>Open Space Details</h1>
+  </ion-content>
+</ion-view>-->
+
+<ion-view view-title="Open Space Details">
+  <ion-content>
+    <div class="card">
+      <div class="item item-body item-text-wrap">
+         <img class="full-image" ng-src="{{baseURL+openspace.image}}" alt="Open Space">
+          <h2>{{openspace.name}}
+          <p>{{openspace.description}}</p>
+      </div>
+    </div>
   </ion-content>
 </ion-view>
