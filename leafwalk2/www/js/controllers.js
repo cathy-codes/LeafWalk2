@@ -71,7 +71,7 @@ angular.module('leafWalk.controllers', [])
   };
 })
 
-.controller('OpenSpacesController', ['$scope', 'openSpacesFactory', 'baseURL', function($scope, openSpacesFactory, baseURL) {
+.controller('OpenSpacesController', ['$scope', 'openSpacesFactory', 'favouriteFactory', 'baseURL', '$ionicListDelegate', function($scope, openSpacesFactory, favouriteFactory, baseURL, $ionicListDelegate) {
   $scope.baseURL = baseURL;
   $scope.showResults = false;
   $scope.message = "Loading ...";
@@ -84,6 +84,12 @@ angular.module('leafWalk.controllers', [])
     function(response) {
       $scope.message = "Error: "+response.status + " " + response.statusText;
     });
+
+    $scope.addFavorite = function (index) {
+        console.log("index is " + index);
+        favouriteFactory.addToFavourites(index);
+        $ionicListDelegate.closeOptionButtons();
+    }
 }])
 
 .controller('IndexController', ['$scope', 'openSpacesFactory', 'baseURL', function($scope, openSpacesFactory, baseURL) {

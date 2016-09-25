@@ -1,8 +1,13 @@
 <ion-view view-title="Open Spaces">
   <ion-content>
     <ion-list>
-      <ion-item ng-repeat="openspace in openspaces" href="#/app/openspaces/{{openspace.id}}">
-        {{openspace.name}}
+      <ion-item ng-repeat="openspace in openspaces" href="#/app/openspaces/{{openspace.id}}" class="item-thumbnail-left">
+        <img ng-src="{{baseURL+openspace.image}}">
+        <h2>{{openspace.name}}</h2>
+        <p>{{openspace.description}}</p>
+        <ion-option-button class="button-assertive icon ion-plus-circled"
+            ng-click="addFavorite({{openspace.id}})">
+        </ion-option-button>
       </ion-item>
     </ion-list>
   </ion-content>
