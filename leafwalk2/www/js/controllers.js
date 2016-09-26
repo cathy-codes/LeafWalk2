@@ -151,19 +151,30 @@ angular.module('leafWalk.controllers', [])
     $scope.leaders = corporateFactory.query();
 
 }])
-.controller('FavouritesController', ['$scope', 'openSpacesFactory', 'favouriteFactory', 'baseURL', '$ionicListDelegate', function ($scope, openSpacesFactory, favouriteFactory, baseURL, $ionicListDelegate) {
+.controller('FavouritesController', ['$scope', 'openSpacesFactory', 'favouriteFactory', 'baseURL', '$ionicListDelegate', '$ionicPopup', '$ionicLoading', '$timeout',
+  function ($scope, openSpacesFactory, favouriteFactory, baseURL, $ionicListDelegate, $ionicPopup, $ionicLoading, $timeout) {
 
     $scope.baseURL = baseURL;
     $scope.shouldShowDelete = false;
+
+    $ionicLoading.show({
+        template: '<ion-spinner></ion-spinner> Loading...'
+    });
 
     $scope.favourites = favouriteFactory.getFavourites();
 
     $scope.openspaces = openSpacesFactory.getOpenSpaces().query(
       function (response) {
           $scope.openspaces = response;
+          $timeout(function () {
+              $ionicLoading.hide();
+          }, 1000);
       },
       function (response) {
           $scope.message = "Error: " + response.status + " " + response.statusText;
+          $timeout(function () {
+            $ionicLoading.hide();
+          }, 1000);
       });
       console.log($scope.openspaces, $scope.favourites);
 
@@ -173,7 +184,20 @@ angular.module('leafWalk.controllers', [])
       }
 
       $scope.deleteFavourite = function (index) {
-          favouriteFactory.deleteFromFavourites(index);
+          var confirmPopup = $ionicPopup.confirm({
+              title: 'Confirm Delete',
+              template: 'Are you sure you want to delete this item?'
+          });
+
+          confirmPopup.then(function (res) {
+            if (res) {
+                console.log('Ok to delete');
+                favouriteFactory.deleteFromFavourites(index);
+            } else {
+                console.log('Canceled delete');
+            }
+          });
+
           $scope.shouldShowDelete = false;
       }}
   ])
