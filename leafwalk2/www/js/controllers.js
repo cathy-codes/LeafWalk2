@@ -108,7 +108,7 @@ angular.module('leafWalk.controllers', [])
         }
     );
 }])
-.controller('OpenSpaceDetailController', ['$scope', '$stateParams', 'openSpacesFactory', 'baseURL', function($scope, $stateParams, openSpacesFactory, baseURL) {
+.controller('OpenSpaceDetailController', ['$scope', '$stateParams', 'openSpacesFactory', 'favouriteFactory', 'baseURL', '$ionicPopover', '$ionicModal', function($scope, $stateParams, openSpacesFactory, favouriteFactory, baseURL, $ionicPopover, $ionicModal) {
     $scope.baseURL = baseURL;
     $scope.openspace = {};
     $scope.showResults = false;
@@ -119,6 +119,77 @@ angular.module('leafWalk.controllers', [])
       function(response){
           $scope.openspace = response;
           $scope.showResults = true;
+
+          var myId = $scope.openspace.id;
+
+            //Add to favourite
+            $scope.addFavourite = function () {
+                favouriteFactory.addToFavourites(myId);
+                $scope.closePopover();
+            };
+
+            //Add comment
+            $scope.addComment = function () {
+                $scope.closePopover();
+                $scope.openModal();
+                console.log(addCommentForm.length);
+            };
+
+            //Popover
+            $scope.popover = $ionicPopover.fromTemplateUrl('templates/openspace-detail-popover.html', {
+                scope: $scope
+            }).then(function (popover) {
+                $scope.popover = popover;
+            });
+
+            $scope.openPopover = function ($event) {
+                $scope.popover.show($event);
+            };
+
+            $scope.closePopover = function () {
+                $scope.popover.hide();
+            };
+
+            $scope.$on('$destroy', function () {
+                $scope.popover.remove();
+            });
+
+            //Modal
+            $ionicModal.fromTemplateUrl('templates/openspace-comment.html', {
+                scope: $scope,
+                animation: 'slide-in-up'
+            }).then(function (modal) {
+                $scope.modal = modal;
+            });
+
+            $scope.openModal = function () {
+                $scope.modal.show();
+            };
+            $scope.closeModal = function () {
+                $scope.modal.hide();
+            };
+
+            $scope.$on('$destroy', function () {
+                $scope.modal.remove();
+            });
+
+            //Comment
+            $scope.mycomment = { rating: 5, comment: "", author: "", date: "" };
+
+            $scope.submitComment = function () {
+
+                $scope.mycomment.date = new Date().toISOString();
+                console.log($scope.mycomment);
+
+                $scope.openspace.comments.push($scope.mycomment);
+                openSpacesFactory.getOpenSpaces().update({ id: $scope.openspace.id }, $scope.openspace);
+
+                //$scope.addCommentForm.$setPristine();
+
+                $scope.mycomment = { rating: 5, comment: "", author: "", date: "" };
+
+                $scope.closeModal();
+            };
       },
       function(response) {
           $scope.message = "Error: "+response.status + " " + response.statusText;
@@ -127,7 +198,7 @@ angular.module('leafWalk.controllers', [])
 
 
 }])
-.controller('DishCommentController', ['$scope', 'openSpacesFactory', function($scope,openSpacesFactory) {
+.controller('OpenSpaceCommentController', ['$scope', 'openSpacesFactory', function($scope,openSpacesFactory) {
 
     $scope.mycomment = {rating:5, comment:"", author:"", date:""};
 
@@ -136,8 +207,8 @@ angular.module('leafWalk.controllers', [])
         $scope.mycomment.date = new Date().toISOString();
         console.log($scope.mycomment);
 
-        $scope.dish.comments.push($scope.mycomment);
-        openSpacesFactory.getDishes().update({id:$scope.openspace.id},$scope.openspace);
+        $scope.openspace.comments.push($scope.mycomment);
+        openSpacesFactory.getOpenSpaces().update({id:$scope.openspace.id},$scope.openspace);
 
         $scope.commentForm.$setPristine();
 
