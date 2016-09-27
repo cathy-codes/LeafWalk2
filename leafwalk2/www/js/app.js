@@ -87,7 +87,12 @@ angular.module('leafWalk', ['ionic', 'leafWalk.controllers','leafWalk.services']
     views: {
       'mainContent': {
         templateUrl: 'templates/openspacedetail.html',
-        controller: 'OpenSpaceDetailController'
+        controller: 'OpenSpaceDetailController',
+        resolve: {
+            openspace: ['$stateParams','openSpacesFactory', function($stateParams, openSpacesFactory){
+                return openSpacesFactory.get({id:parseInt($stateParams.id, 10)});
+            }]
+        }
       }
     }
   })
@@ -96,7 +101,15 @@ angular.module('leafWalk', ['ionic', 'leafWalk.controllers','leafWalk.services']
     views: {
       'mainContent': {
         templateUrl: 'templates/favourites.html',
-          controller:'FavouritesController'
+          controller:'FavouritesController',
+          resolve: {
+              openspaces:  ['openSpacesFactory', function(openSpacesFactory){
+                return openSpacesFactory.query();
+              }],
+              favourites: ['favouriteFactory', function(favouriteFactory) {
+                  return favouriteFactory.getFavourites();
+              }]
+          }
       }
     }
   });

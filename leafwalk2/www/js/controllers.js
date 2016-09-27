@@ -76,7 +76,7 @@ angular.module('leafWalk.controllers', [])
   $scope.showResults = false;
   $scope.message = "Loading ...";
 
-  openSpacesFactory.getOpenSpaces().query(
+  openSpacesFactory.query(
     function(response) {
       $scope.openspaces = response;
       $scope.showResults = true;
@@ -92,12 +92,14 @@ angular.module('leafWalk.controllers', [])
     }
 }])
 
-.controller('IndexController', ['$scope', 'openSpacesFactory', 'baseURL', function($scope, openSpacesFactory, baseURL) {
+.controller('IndexController', ['$scope', 'openSpacesFactory', 'baseURL',
+  function($scope, openSpacesFactory, baseURL) {
     $scope.baseURL = baseURL;
+
     $scope.showResults = false;
     $scope.message="Loading ...";
 
-    $scope.openspace = openSpacesFactory.getOpenSpaces().get({id:0})
+    $scope.openspace = openSpacesFactory.get({id:0})
     .$promise.then(
         function(response){
             $scope.openspace = response;
@@ -108,13 +110,15 @@ angular.module('leafWalk.controllers', [])
         }
     );
 }])
-.controller('OpenSpaceDetailController', ['$scope', '$stateParams', 'openSpacesFactory', 'favouriteFactory', 'baseURL', '$ionicPopover', '$ionicModal', function($scope, $stateParams, openSpacesFactory, favouriteFactory, baseURL, $ionicPopover, $ionicModal) {
+.controller('OpenSpaceDetailController', ['$scope', '$stateParams', 'openspace', 'openSpacesFactory', 'favouriteFactory', 'baseURL', '$ionicPopover', '$ionicModal',
+  function($scope, $stateParams, openspace, openSpacesFactory, favouriteFactory, baseURL, $ionicPopover, $ionicModal) {
     $scope.baseURL = baseURL;
     $scope.openspace = {};
     $scope.showResults = false;
     $scope.message="Loading ...";
 
-    $scope.openspace = openSpacesFactory.getOpenSpaces().get({id:parseInt($stateParams.id,10)})
+    //$scope.openspace = openSpacesFactory.get({id:parseInt($stateParams.id,10)})
+    $scope.openspace = openspace
     .$promise.then(
       function(response){
           $scope.openspace = response;
@@ -182,7 +186,7 @@ angular.module('leafWalk.controllers', [])
                 console.log($scope.mycomment);
 
                 $scope.openspace.comments.push($scope.mycomment);
-                openSpacesFactory.getOpenSpaces().update({ id: $scope.openspace.id }, $scope.openspace);
+                openSpacesFactory.update({ id: $scope.openspace.id }, $scope.openspace);
 
                 //$scope.addCommentForm.$setPristine();
 
@@ -208,7 +212,7 @@ angular.module('leafWalk.controllers', [])
         console.log($scope.mycomment);
 
         $scope.openspace.comments.push($scope.mycomment);
-        openSpacesFactory.getOpenSpaces().update({id:$scope.openspace.id},$scope.openspace);
+        openSpacesFactory.update({id:$scope.openspace.id},$scope.openspace);
 
         $scope.commentForm.$setPristine();
 
@@ -222,19 +226,22 @@ angular.module('leafWalk.controllers', [])
     $scope.leaders = corporateFactory.query();
 
 }])
-.controller('FavouritesController', ['$scope', 'openSpacesFactory', 'favouriteFactory', 'baseURL', '$ionicListDelegate', '$ionicPopup', '$ionicLoading', '$timeout',
-  function ($scope, openSpacesFactory, favouriteFactory, baseURL, $ionicListDelegate, $ionicPopup, $ionicLoading, $timeout) {
+.controller('FavouritesController', ['$scope', 'openspaces', 'favourites', 'openSpacesFactory', 'favouriteFactory', 'baseURL', '$ionicListDelegate', '$ionicPopup', '$ionicLoading', '$timeout',
+  function ($scope, openspaces, favourites, openSpacesFactory, favouriteFactory, baseURL, $ionicListDelegate, $ionicPopup, $ionicLoading, $timeout) {
 
     $scope.baseURL = baseURL;
     $scope.shouldShowDelete = false;
 
-    $ionicLoading.show({
+    $scope.favourites = favourites;
+    $scope.openspaces = openspaces;
+
+    /*$ionicLoading.show({
         template: '<ion-spinner></ion-spinner> Loading...'
-    });
+    });*/
 
-    $scope.favourites = favouriteFactory.getFavourites();
+    //$scope.favourites = favouriteFactory.getFavourites();
 
-    $scope.openspaces = openSpacesFactory.getOpenSpaces().query(
+    /*$scope.openspaces = openSpacesFactory.query(
       function (response) {
           $scope.openspaces = response;
           $timeout(function () {
@@ -246,7 +253,7 @@ angular.module('leafWalk.controllers', [])
           $timeout(function () {
             $ionicLoading.hide();
           }, 1000);
-      });
+      });*/
       console.log($scope.openspaces, $scope.favourites);
 
       $scope.toggleDelete = function () {
