@@ -16,9 +16,10 @@ angular.module('leafWalk.services', ['ngResource'])
         .factory('feedbackFactory', ['$resource', 'baseURL', function($resource,baseURL) {
             return $resource(baseURL+"feedback/:id");
         }])*/
-        .factory('favouriteFactory', ['$resource', 'baseURL', function ($resource, baseURL) {
+        .factory('favouriteFactory', ['$resource', '$localStorage', 'baseURL', function ($resource, $localStorage, baseURL) {
           var favFac = {};
-          var favourites = [];
+          //var favourites = [];
+          var favourites = $localStorage.getObject('favourites', '[]');
 
           favFac.addToFavourites = function (index) {
               for (var i = 0; i < favourites.length; i++) {
@@ -26,12 +27,20 @@ angular.module('leafWalk.services', ['ngResource'])
                       return;
               }
               favourites.push({id: index});
+
+              //Add to localStorage
+              $localStorage.storeObject('favourites',favourites);
+              console.log(favourites);
           };
 
           favFac.deleteFromFavourites = function (index) {
               for (var i = 0; i < favourites.length; i++) {
                   if (favourites[i].id == index) {
+                      console.log(favourites[i]);
                       favourites.splice(i, 1);
+
+                      //Replace favourites in localStorage with new favourites
+                      $localStorage.storeObject('favourites', favourites);
                   }
               }
           }

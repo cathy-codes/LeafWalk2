@@ -32,7 +32,7 @@ angular.module('leafWalk.controllers', [])
   $scope.doLogin = function() {
     console.log('Doing login', $scope.loginData);
     $localStorage.storeObject('userinfo',$scope.loginData);
-    
+
     // Simulate a login delay. Remove this and replace with your login
     // code if using a login system
     $timeout(function() {
@@ -72,44 +72,24 @@ angular.module('leafWalk.controllers', [])
   };
 })
 
-.controller('OpenSpacesController', ['$scope', 'openSpacesFactory', 'favouriteFactory', 'baseURL', '$ionicListDelegate', function($scope, openSpacesFactory, favouriteFactory, baseURL, $ionicListDelegate) {
+.controller('OpenSpacesController', ['$scope', 'openspaces', 'openSpacesFactory', 'favouriteFactory', 'baseURL', '$ionicListDelegate', function($scope, openspaces, openSpacesFactory, favouriteFactory, baseURL, $ionicListDelegate) {
   $scope.baseURL = baseURL;
-  $scope.showResults = false;
-  $scope.message = "Loading ...";
 
-  openSpacesFactory.query(
-    function(response) {
-      $scope.openspaces = response;
-      $scope.showResults = true;
-    },
-    function(response) {
-      $scope.message = "Error: "+response.status + " " + response.statusText;
-    });
-
-    $scope.addFavorite = function (index) {
-      console.log("index is " + index);
-      favouriteFactory.addToFavourites(index);
-      $ionicListDelegate.closeOptionButtons();
-    }
+  $scope.openspaces = openspaces;
+  
+  $scope.addFavorite = function (index) {
+    console.log("index is " + index);
+    favouriteFactory.addToFavourites(index);
+    $ionicListDelegate.closeOptionButtons();
+  }
 }])
 
-.controller('IndexController', ['$scope', 'openSpacesFactory', 'baseURL',
-  function($scope, openSpacesFactory, baseURL) {
+.controller('IndexController', ['$scope', 'openspace', 'openSpacesFactory', 'baseURL',
+  function($scope, openspace, openSpacesFactory, baseURL) {
+
     $scope.baseURL = baseURL;
+    $scope.openspace = openspace;
 
-    $scope.showResults = false;
-    $scope.message="Loading ...";
-
-    $scope.openspace = openSpacesFactory.get({id:0})
-    .$promise.then(
-        function(response){
-            $scope.openspace = response;
-            $scope.showResults = true;
-        },
-        function(response) {
-            $scope.message = "Error: "+response.status + " " + response.statusText;
-        }
-    );
 }])
 .controller('OpenSpaceDetailController', ['$scope', '$stateParams', 'openspace', 'openSpacesFactory', 'favouriteFactory', 'baseURL', '$ionicPopover', '$ionicModal',
   function($scope, $stateParams, openspace, openSpacesFactory, favouriteFactory, baseURL, $ionicPopover, $ionicModal) {
@@ -221,10 +201,10 @@ angular.module('leafWalk.controllers', [])
     }
 }])
 
-.controller('AboutController', ['$scope', 'corporateFactory', 'baseURL', function ($scope, corporateFactory, baseURL) {
+.controller('AboutController', ['$scope', 'leaders', 'corporateFactory', 'baseURL', function ($scope, corporateFactory, baseURL) {
 
     $scope.baseURL = baseURL;
-    $scope.leaders = corporateFactory.query();
+    $scope.leaders = leaders;
 
 }])
 .controller('FavouritesController', ['$scope', 'openspaces', 'favourites', 'openSpacesFactory', 'favouriteFactory', 'baseURL', '$ionicListDelegate', '$ionicPopup', '$ionicLoading', '$timeout',
