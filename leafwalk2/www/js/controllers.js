@@ -72,16 +72,41 @@ angular.module('leafWalk.controllers', [])
   };
 })
 
-.controller('OpenSpacesController', ['$scope', 'openspaces', 'openSpacesFactory', 'favouriteFactory', 'baseURL', '$ionicListDelegate', function($scope, openspaces, openSpacesFactory, favouriteFactory, baseURL, $ionicListDelegate) {
+.controller('OpenSpacesController', ['$scope', 'openspaces', 'openSpacesFactory', 'favouriteFactory', 'baseURL', '$ionicListDelegate', '$ionicPlatform', '$cordovaLocalNotification', '$cordovaToast',
+  function($scope, openspaces, openSpacesFactory, favouriteFactory, baseURL, $ionicListDelegate, $ionicPlatform, $cordovaLocalNotification, $cordovaToast) {
+
   $scope.baseURL = baseURL;
 
   $scope.openspaces = openspaces;
-  
+
   $scope.addFavorite = function (index) {
     console.log("index is " + index);
     favouriteFactory.addToFavourites(index);
     $ionicListDelegate.closeOptionButtons();
-  }
+
+
+      $ionicPlatform.ready(function () {
+        $cordovaLocalNotification.schedule({
+            id: 1,
+            title: "Added Favourite",
+            text: $scope.openspaces[index].name
+        }).then(function () {
+            console.log('Added Favourite '+$scope.openspaces[index].name);
+        },
+        function () {
+            console.log('Failed to add Notification ');
+        });
+
+        $cordovaToast
+          .show('Added Favourite '+$scope.openspaces[index].name, 'long', 'center')
+          .then(function (success) {
+              // success
+          }, function (error) {
+              // error
+          });
+      });
+  };
+
 }])
 
 .controller('IndexController', ['$scope', 'openspace', 'openSpacesFactory', 'baseURL',
