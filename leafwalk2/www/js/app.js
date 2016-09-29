@@ -4,9 +4,9 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('leafWalk', ['ionic', 'leafWalk.controllers','leafWalk.services'])
+angular.module('leafWalk', ['ionic', 'ngCordova', 'leafWalk.controllers','leafWalk.services'])
 
-.run(function($ionicPlatform, $rootScope, $ionicLoading) {
+.run(function($ionicPlatform, $rootScope, $ionicLoading, $cordovaSplashscreen, $timeout) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -24,7 +24,6 @@ angular.module('leafWalk', ['ionic', 'leafWalk.controllers','leafWalk.services']
         $ionicLoading.show({
             template: '<ion-spinner></ion-spinner> Loading...'
         });
-        //console.log("Mawaru mawaru");
     });
 
     $rootScope.$on('loading:hide', function () {
@@ -40,6 +39,11 @@ angular.module('leafWalk', ['ionic', 'leafWalk.controllers','leafWalk.services']
         console.log('done');
         $rootScope.$broadcast('loading:hide');
     });
+
+    $timeout(function(){
+      $cordovaSplashscreen.hide();
+      console.log("Splashscreen");
+    },20000);
   });
 })
 
@@ -116,7 +120,7 @@ angular.module('leafWalk', ['ionic', 'leafWalk.controllers','leafWalk.services']
           templateUrl: 'templates/openspaces.html',
           controller: 'OpenSpacesController',
           resolve: {
-              openspaces: ['openSpacesFactory', function (openSpacesFactory) {                        
+              openspaces: ['openSpacesFactory', function (openSpacesFactory) {
                   return openSpacesFactory.query();
               }]
           }

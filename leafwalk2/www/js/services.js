@@ -1,7 +1,8 @@
 'use strict';
 
 angular.module('leafWalk.services', ['ngResource'])
-        .constant("baseURL","http://localhost:3000/")
+        //.constant("baseURL","http://localhost:3000/")
+        .constant("baseURL","http://192.168.2.1:3000/")
         .service('openSpacesFactory', ['$resource', 'baseURL', function($resource,baseURL) {
 
           return $resource(baseURL + "openspaces/:id", null, {
