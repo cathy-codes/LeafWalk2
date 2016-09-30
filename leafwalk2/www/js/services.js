@@ -5,6 +5,17 @@ angular.module('leafWalk.services', ['ngResource'])
         .constant("baseURL","http://192.168.2.12:3000/")
         .service('openSpacesFactory', ['$resource', 'baseURL', function($resource,baseURL) {
 
+          /*var features = [
+              {
+                _id: 0,
+                name: "Burgess Park 2",
+                xcoord: 51.4834963,
+                ycoord: -0.0837171,
+                description: "A lake, sports facilities, gardens and a cafe, all set in spacious parklands created in the 1940s.",
+                image: "images/1.jpg",
+              }
+          ];*/
+
           return $resource(baseURL + "openspaces/:id", null, {
             'update': {
                 method: 'PUT'

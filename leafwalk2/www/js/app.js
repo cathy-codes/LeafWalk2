@@ -68,10 +68,10 @@ angular.module('leafWalk', ['ionic', 'ngCordova', 'leafWalk.controllers','leafWa
             openspace: ['openSpacesFactory', function (openSpacesFactory) {
                return openSpacesFactory.get({ id: 0 });
             }],
-            /*promotion: ['promotionFactory', function (promotionFactory) {
-                return promotionFactory.get({ id: 0 });
-            }],
-            leader: ['corporateFactory', function (corporateFactory) {
+            /*feature: ['featureFactory', function (featureFactory) {
+                return featureFactory.get({ id: 0 });
+            }],*/
+            /*leader: ['corporateFactory', function (corporateFactory) {
                 return corporateFactory.get({id: 3});
             }]*/
          }
