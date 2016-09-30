@@ -1,5 +1,5 @@
 angular.module('leafWalk.controllers', [])
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $localStorage, $ionicPlatform, $cordovaCamera) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $localStorage, $ionicPlatform, $cordovaCamera, $cordovaImagePicker) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -68,7 +68,7 @@ angular.module('leafWalk.controllers', [])
     }, 1000);
   };
 
-  //Use the phone's camera
+  //Use the phone's camera/ gets image from gallery
   $ionicPlatform.ready(function() {
       var options = {
           quality: 50,
@@ -90,6 +90,23 @@ angular.module('leafWalk.controllers', [])
 
           $scope.registerform.show();
 
+      };
+
+      //Choose image from phone gallery
+      var galleryOptions = {
+          maximumImagesCount: 1,
+          width: 100,
+          height: 100,
+          quality: 50
+      };
+      $scope.openGallery = function () {
+          $cordovaImagePicker.getPictures(galleryOptions)
+            .then(function (results) {
+                $scope.registration.imgSrc = results[0];
+                $scope.registerform.show();
+            }, function (error) {
+                console.log(error)
+            });
       };
   });
 
@@ -169,8 +186,8 @@ angular.module('leafWalk.controllers', [])
     $scope.openspace = openspace;
 
 }])
-.controller('OpenSpaceDetailController', ['$scope', '$stateParams', 'openspace', 'openSpacesFactory', 'favouriteFactory', 'baseURL', '$ionicPopover', '$ionicModal',
-  function($scope, $stateParams, openspace, openSpacesFactory, favouriteFactory, baseURL, $ionicPopover, $ionicModal) {
+.controller('OpenSpaceDetailController', ['$scope', '$stateParams', 'openspace', 'openSpacesFactory', 'favouriteFactory', 'baseURL', '$ionicPopover', '$ionicModal', '$ionicPlatform', '$cordovaLocalNotification', '$cordovaToast',
+  function($scope, $stateParams, openspace, openSpacesFactory, favouriteFactory, baseURL, $ionicPopover, $ionicModal, $ionicPlatform, $cordovaLocalNotification, $cordovaToast) {
     $scope.baseURL = baseURL;
     $scope.openspace = {};
     $scope.showResults = false;
@@ -184,75 +201,97 @@ angular.module('leafWalk.controllers', [])
           $scope.showResults = true;
 
           var myId = $scope.openspace.id;
+          var openSpaceName = $scope.openspace.name;
 
-            //Add to favourite
-            $scope.addFavourite = function () {
-                favouriteFactory.addToFavourites(myId);
-                $scope.closePopover();
-            };
+          //Add to favourite
+          $scope.addFavourite = function () {
+              favouriteFactory.addToFavourites(myId);
 
-            //Add comment
-            $scope.addComment = function () {
-                $scope.closePopover();
-                $scope.openModal();
-                console.log(addCommentForm.length);
-            };
+              $ionicPlatform.ready(function () {
+                  $cordovaLocalNotification.schedule({
+                      id: 1,
+                      title: "Added Favourite",
+                      text: openSpaceName
+                  }).then(function () {
+                      console.log('Added Favourite ' + openSpaceName);
+                  },
+                  function () {
+                      console.log('Failed to add Notification ');
+                  });
 
-            //Popover
-            $scope.popover = $ionicPopover.fromTemplateUrl('templates/openspace-detail-popover.html', {
-                scope: $scope
-            }).then(function (popover) {
-                $scope.popover = popover;
-            });
+                  $cordovaToast
+                    .show('Added Favourite ' + openSpaceName, 'long', 'bottom')
+                    .then(function (success) {
+                        // success
+                    }, function (error) {
+                        // error
+                    });
+              });
+              $scope.closePopover();
+          };
 
-            $scope.openPopover = function ($event) {
-                $scope.popover.show($event);
-            };
+          //Add comment
+          $scope.addComment = function () {
+              $scope.closePopover();
+              $scope.openModal();
+              console.log(addCommentForm.length);
+          };
 
-            $scope.closePopover = function () {
-                $scope.popover.hide();
-            };
+          //Popover
+          $scope.popover = $ionicPopover.fromTemplateUrl('templates/openspace-detail-popover.html', {
+              scope: $scope
+          }).then(function (popover) {
+              $scope.popover = popover;
+          });
 
-            $scope.$on('$destroy', function () {
-                $scope.popover.remove();
-            });
+          $scope.openPopover = function ($event) {
+              $scope.popover.show($event);
+          };
 
-            //Modal
-            $ionicModal.fromTemplateUrl('templates/openspace-comment.html', {
-                scope: $scope,
-                animation: 'slide-in-up'
-            }).then(function (modal) {
-                $scope.modal = modal;
-            });
+          $scope.closePopover = function () {
+              $scope.popover.hide();
+          };
 
-            $scope.openModal = function () {
-                $scope.modal.show();
-            };
-            $scope.closeModal = function () {
-                $scope.modal.hide();
-            };
+          $scope.$on('$destroy', function () {
+              $scope.popover.remove();
+          });
 
-            $scope.$on('$destroy', function () {
-                $scope.modal.remove();
-            });
+          //Modal
+          $ionicModal.fromTemplateUrl('templates/openspace-comment.html', {
+              scope: $scope,
+              animation: 'slide-in-up'
+          }).then(function (modal) {
+              $scope.modal = modal;
+          });
 
-            //Comment
-            $scope.mycomment = { rating: 5, comment: "", author: "", date: "" };
+          $scope.openModal = function () {
+              $scope.modal.show();
+          };
+          $scope.closeModal = function () {
+              $scope.modal.hide();
+          };
 
-            $scope.submitComment = function () {
+          $scope.$on('$destroy', function () {
+              $scope.modal.remove();
+          });
 
-                $scope.mycomment.date = new Date().toISOString();
-                console.log($scope.mycomment);
+          //Comment
+          $scope.mycomment = { rating: 5, comment: "", author: "", date: "" };
 
-                $scope.openspace.comments.push($scope.mycomment);
-                openSpacesFactory.update({ id: $scope.openspace.id }, $scope.openspace);
+          $scope.submitComment = function () {
 
-                //$scope.addCommentForm.$setPristine();
+              $scope.mycomment.date = new Date().toISOString();
+              console.log($scope.mycomment);
 
-                $scope.mycomment = { rating: 5, comment: "", author: "", date: "" };
+              $scope.openspace.comments.push($scope.mycomment);
+              openSpacesFactory.update({ id: $scope.openspace.id }, $scope.openspace);
 
-                $scope.closeModal();
-            };
+              //$scope.addCommentForm.$setPristine();
+
+              $scope.mycomment = { rating: 5, comment: "", author: "", date: "" };
+
+              $scope.closeModal();
+          };
       },
       function(response) {
           $scope.message = "Error: "+response.status + " " + response.statusText;
@@ -285,8 +324,8 @@ angular.module('leafWalk.controllers', [])
     $scope.leaders = leaders;
 
 }])
-.controller('FavouritesController', ['$scope', 'openspaces', 'favourites', 'openSpacesFactory', 'favouriteFactory', 'baseURL', '$ionicListDelegate', '$ionicPopup', '$ionicLoading', '$timeout',
-  function ($scope, openspaces, favourites, openSpacesFactory, favouriteFactory, baseURL, $ionicListDelegate, $ionicPopup, $ionicLoading, $timeout) {
+.controller('FavouritesController', ['$scope', 'openspaces', 'favourites', 'openSpacesFactory', 'favouriteFactory', 'baseURL', '$ionicListDelegate', '$ionicPopup', '$ionicLoading', '$timeout', '$ionicPlatform', '$cordovaVibration',
+  function ($scope, openspaces, favourites, openSpacesFactory, favouriteFactory, baseURL, $ionicListDelegate, $ionicPopup, $ionicLoading, $timeout, $ionicPlatform, $cordovaVibration) {
 
     $scope.baseURL = baseURL;
     $scope.shouldShowDelete = false;
@@ -330,6 +369,11 @@ angular.module('leafWalk.controllers', [])
             if (res) {
                 console.log('Ok to delete');
                 favouriteFactory.deleteFromFavourites(index);
+
+                $ionicPlatform.ready(function() {
+                  $cordovaVibration.vibrate(100);
+                });
+                
             } else {
                 console.log('Canceled delete');
             }
